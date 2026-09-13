@@ -1,9 +1,15 @@
-backend/.venv/
-backend/.env
-frontend/node_modules/
-frontend/dist/
+.env
+.env.*
+!.env.example
+.venv/
 __pycache__/
+.pytest_cache/
 *.pyc
+*.db
+*.db-*
+node_modules/
+dist/
+*.p8
 .DS_Store
 
 plan.md

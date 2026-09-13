@@ -1,0 +1,55 @@
+name: Verify
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: playlist
+          POSTGRES_PASSWORD: playlist
+          POSTGRES_DB: playlist
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U playlist"
+          --health-interval 5s --health-retries 10
+      rabbitmq:
+        image: rabbitmq:4-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: playlist
+          RABBITMQ_DEFAULT_PASS: playlist
+        ports: [5672:5672]
+        options: >-
+          --health-cmd "rabbitmq-diagnostics -q ping"
+          --health-interval 5s --health-retries 20
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: postgresql+psycopg://playlist:playlist@localhost:5432/playlist
+      RABBITMQ_URL: amqp://playlist:playlist@localhost:5672/
+      DEMO_MODE: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements.txt ruff
+      - run: ruff check app tests scripts
+      - run: python -m pytest -q
+      - run: alembic upgrade head
+      - run: alembic check
+      - run: python -m scripts.queue_smoke
+      - run: TEST_DATABASE_URL="$DATABASE_URL" python -m pytest -q
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm, cache-dependency-path: frontend/package-lock.json}
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build

@@ -1,0 +1,64 @@
+services:
+  frontend:
+    build: ./frontend
+    ports: ["127.0.0.1:5173:80"]
+    depends_on: [api]
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: playlist
+      POSTGRES_PASSWORD: playlist
+      POSTGRES_DB: playlist
+    volumes: ["postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U playlist"]
+      interval: 5s
+      retries: 10
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: playlist
+      RABBITMQ_DEFAULT_PASS: playlist
+    ports: ["127.0.0.1:15672:15672"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      retries: 20
+  migrate:
+    build: ./backend
+    env_file: backend/.env
+    environment: &environment
+      DATABASE_URL: postgresql+psycopg://playlist:playlist@db:5432/playlist
+      RABBITMQ_URL: amqp://playlist:playlist@rabbitmq:5672/
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db: {condition: service_healthy}
+  api:
+    build: ./backend
+    volumes: ["./secrets:/run/secrets:ro"]
+    env_file: backend/.env
+    environment: *environment
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+  relay:
+    build: ./backend
+    env_file: backend/.env
+    environment: *environment
+    command: ["python", "-m", "app.workers.runner", "relay"]
+    restart: unless-stopped
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      rabbitmq: {condition: service_healthy}
+  worker:
+    build: ./backend
+    volumes: ["./secrets:/run/secrets:ro"]
+    env_file: backend/.env
+    environment: *environment
+    command: ["python", "-m", "app.workers.runner", "worker"]
+    restart: unless-stopped
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      rabbitmq: {condition: service_healthy}
+volumes:
+  postgres:

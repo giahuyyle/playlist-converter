@@ -1,0 +1,23 @@
+# Isolated infrastructure for integration tests. No real provider credentials.
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: playlist
+      POSTGRES_PASSWORD: playlist
+      POSTGRES_DB: playlist
+    ports: ["127.0.0.1:55432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U playlist"]
+      interval: 2s
+      retries: 30
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: playlist
+      RABBITMQ_DEFAULT_PASS: playlist
+    ports: ["127.0.0.1:55672:5672"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 2s
+      retries: 30
