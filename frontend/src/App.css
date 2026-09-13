@@ -276,7 +276,7 @@ h3 {
 }
 
 .route-row .load-button,
-.form-row button {
+.form-row > .primary {
   grid-column: 1 / -1;
 }
 
