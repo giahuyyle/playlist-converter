@@ -1,7 +1,9 @@
 from fastapi import APIRouter
+
 from app.models.track import Track
 
 router = APIRouter(prefix="/example", tags=["example"])
+
 
 @router.get("/track")
 def get_example_track():
