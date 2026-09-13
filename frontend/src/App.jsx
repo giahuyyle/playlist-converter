@@ -196,6 +196,15 @@ function App() {
       if (request === playlistRequest.current) setLoading(false);
     }
   }
+  function swapRoute() {
+    playlistRequest.current++;
+    setLoading(false);
+    setSource(destination);
+    setDestination(source);
+    setPlaylists([]);
+    setPlaylistId("");
+    setName("");
+  }
   async function analyze() {
     const body = {
       source_provider: source,
@@ -250,19 +259,13 @@ function App() {
           </span>
           <span>Side A / Side B</span>
         </a>
-        <span className="header-meta">Private session</span>
+        <span className={`header-meta ${me?.demo ? "is-demo" : ""}`}>
+          {me?.demo ? "Demo data" : "Private session"}
+        </span>
       </header>
       <section className="intro">
-        <span className="eyebrow">PLAYLIST TRANSFER</span>
-        <h1>
-          Move your music.
-          <br />
-          <span>Keep every track.</span>
-        </h1>
-        <p>
-          Bring a playlist to a new service, review uncertain matches, and stay
-          in control before anything moves.
-        </p>
+        <h1>Move a playlist.</h1>
+        <p>Choose the services, review uncertain matches, then transfer.</p>
       </section>
       {error && (
         <div className="error" role="alert">
@@ -282,20 +285,10 @@ function App() {
         </div>
       ) : (
         <div id="workspace">
-          {me.demo && (
-            <div className="notice" role="note">
-              <strong>Demo workspace</strong>
-              <span>Sample music only. Transfers stay in this app.</span>
-            </div>
-          )}
           <div className="workspace-grid">
             <section className="panel connections-panel" aria-labelledby="connections-title">
               <div className="section-heading">
-                <span className="step" aria-hidden="true">1</span>
-                <div>
-                  <span className="eyebrow">Accounts</span>
-                  <h2 id="connections-title">Connect your music</h2>
-                </div>
+                <h2 id="connections-title">Services</h2>
               </div>
               <div className="accounts">
               {providers.map((p) => {
@@ -338,15 +331,14 @@ function App() {
             </section>
             <section className="panel route-panel" aria-labelledby="playlist-title">
             <div className="section-heading">
-              <span className="step" aria-hidden="true">2</span>
-              <div>
-                <span className="eyebrow">New transfer</span>
-                <h2 id="playlist-title">Choose a playlist</h2>
-              </div>
+              <h2 id="playlist-title">New transfer</h2>
             </div>
             <div className="form-row route-row">
-              <label>
-                From
+              <label className="route-field">
+                <span>From</span>
+                <span className={`provider-logo ${source}`} aria-hidden="true">
+                  <img src={logos[source]} alt="" />
+                </span>
                 <select
                   value={source}
                   disabled={busy}
@@ -369,9 +361,21 @@ function App() {
                   ))}
                 </select>
               </label>
-              <span className="arrow">→</span>
-              <label>
-                To
+              <button
+                className="swap-button"
+                type="button"
+                disabled={busy || loading}
+                aria-label="Swap source and destination"
+                title="Swap services"
+                onClick={swapRoute}
+              >
+                ⇄
+              </button>
+              <label className="route-field">
+                <span>To</span>
+                <span className={`provider-logo ${destination}`} aria-hidden="true">
+                  <img src={logos[destination]} alt="" />
+                </span>
                 <select
                   value={destination}
                   disabled={busy}
@@ -391,7 +395,7 @@ function App() {
                 disabled={busy || loading || !me.connected.includes(source)}
                 onClick={loadPlaylists}
               >
-                {loading ? "Loading…" : "Load playlists"}
+                {loading ? "Loading…" : "Show playlists"}
               </button>
             </div>
             {playlists.length > 0 && (
@@ -437,15 +441,13 @@ function App() {
                   }
                   onClick={() => perform(analyze)}
                 >
-                  Analyze playlist →
+                  Review matches
                 </button>
               </div>
             )}
-            {!loading && playlists.length === 0 && (
+            {!loading && playlists.length === 0 && !sourceConnected && (
               <p className="helper-text" role="status">
-                {sourceConnected
-                  ? `Ready to load playlists from ${labels[source]}.`
-                  : `Connect ${labels[source]} above to load its playlists.`}
+                Connect {labels[source]} to view its playlists.
               </p>
             )}
             {playlists.length > 0 && !destinationConnected && (
@@ -458,7 +460,6 @@ function App() {
           {conversion && (
             <section className="panel transfer-panel" aria-label="Transfer details" aria-busy={active.includes(status)}>
               <div className="section-heading">
-                <span className="step" aria-hidden="true">3</span>
                 <div>
                   <span className="eyebrow">
                     {labels[conversion.source_provider]} →{" "}
@@ -659,8 +660,13 @@ function App() {
           <section className="panel">
             <div className="section-heading">
               <h2>Transfer history</h2>
-              <button disabled={busy} onClick={() => perform(refresh)}>
-                Refresh
+              <button
+                className="icon-button"
+                aria-label="Refresh transfer history"
+                disabled={busy}
+                onClick={() => perform(refresh)}
+              >
+                ↻
               </button>
             </div>
             {history.length ? (
@@ -699,10 +705,6 @@ function App() {
           </section>
         </div>
       )}
-      <footer>
-        Made for the music you keep.
-        <span>Private destination playlists · You control every transfer</span>
-      </footer>
     </main>
   );
 }
