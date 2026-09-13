@@ -1,45 +1,60 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap");
-
 :root {
-  --paper: #f4f2eb;
-  --surface: #fffefa;
-  --ink: #202c25;
-  --muted: #69766d;
-  --muted-dark: #56645b;
-  --line: #dfe2da;
-  --line-strong: #c7cdc2;
-  --green: #314b38;
-  --green-hover: #405e46;
-  --green-soft: #5c7457;
-  --green-pale: #edf0e6;
-  color: var(--ink);
-  background: var(--paper);
-  font-family: "DM Sans", sans-serif;
+  --page: #f5f5f7;
+  --surface: rgba(255, 255, 255, 0.74);
+  --surface-solid: #ffffff;
+  --surface-raised: rgba(255, 255, 255, 0.9);
+  --text: #1d1d1f;
+  --secondary: #6e6e73;
+  --tertiary: #86868b;
+  --hairline: rgba(0, 0, 0, 0.09);
+  --hairline-strong: rgba(0, 0, 0, 0.17);
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --accent-tint: rgba(0, 113, 227, 0.1);
+  --success: #248a3d;
+  --success-tint: rgba(52, 199, 89, 0.12);
+  --warning: #946200;
+  --warning-tint: rgba(255, 159, 10, 0.13);
+  --danger: #d70015;
+  --danger-tint: rgba(255, 59, 48, 0.11);
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+  color: var(--text);
+  background: var(--page);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Helvetica Neue", Arial, sans-serif;
   font-synthesis: none;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.47;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -15%, rgba(0, 113, 227, 0.1), transparent 34rem),
+    var(--page);
 }
 
 button,
 input,
 select {
   min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid #c9cec5;
-  border-radius: 9px;
-  background: #fff;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 12px;
+  background: var(--surface-solid);
   color: inherit;
   font: inherit;
 }
@@ -47,27 +62,95 @@ select {
 button,
 a,
 input,
-select { -webkit-tap-highlight-color: transparent; }
+select {
+  -webkit-tap-highlight-color: transparent;
+}
 
 button {
   cursor: pointer;
   font-weight: 600;
-  transition: background 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
+  transition:
+    transform 90ms ease-out,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
-button:hover:not(:disabled) { border-color: #adb6aa; background: #eff1e9; }
-button:active:not(:disabled) { transform: translateY(1px); }
-button:disabled { cursor: not-allowed; opacity: 0.48; }
+button:hover:not(:disabled) {
+  border-color: var(--hairline-strong);
+  background: rgba(0, 0, 0, 0.035);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 70ms;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
 
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid #b76c2b;
-  outline-offset: 3px;
+  outline: 4px solid rgba(0, 113, 227, 0.28);
+  outline-offset: 2px;
 }
 
-a { color: inherit; }
-h1, h2, h3, p { margin-top: 0; }
-input, select { width: 100%; max-width: 100%; }
-small { font-size: 12px; }
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+input,
+select {
+  width: 100%;
+  max-width: 100%;
+}
+
+small {
+  font-size: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #000000;
+    --surface: rgba(38, 38, 40, 0.74);
+    --surface-solid: #1c1c1e;
+    --surface-raised: rgba(44, 44, 46, 0.9);
+    --text: #f5f5f7;
+    --secondary: #aeaeb2;
+    --tertiary: #8e8e93;
+    --hairline: rgba(255, 255, 255, 0.11);
+    --hairline-strong: rgba(255, 255, 255, 0.2);
+    --accent: #0a84ff;
+    --accent-hover: #409cff;
+    --accent-tint: rgba(10, 132, 255, 0.17);
+    --success: #30d158;
+    --success-tint: rgba(48, 209, 88, 0.16);
+    --warning: #ffd60a;
+    --warning-tint: rgba(255, 214, 10, 0.14);
+    --danger: #ff453a;
+    --danger-tint: rgba(255, 69, 58, 0.16);
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at 50% -15%, rgba(10, 132, 255, 0.16), transparent 34rem),
+      var(--page);
+  }
+
+  button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.07);
+  }
+}

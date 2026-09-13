@@ -250,18 +250,18 @@ function App() {
           </span>
           <span>Side A / Side B</span>
         </a>
-        <span className="eyebrow">PLAYLIST CONVERTER</span>
+        <span className="header-meta">Private session</span>
       </header>
       <section className="intro">
-        <span className="eyebrow">YOUR MUSIC, EVERYWHERE</span>
+        <span className="eyebrow">PLAYLIST TRANSFER</span>
         <h1>
-          A new home.
+          Move your music.
           <br />
-          <em>The same soundtrack.</em>
+          <span>Keep every track.</span>
         </h1>
         <p>
-          Move your playlists between music services. Check every match before
-          anything is transferred.
+          Bring a playlist to a new service, review uncertain matches, and stay
+          in control before anything moves.
         </p>
       </section>
       {error && (
@@ -288,15 +288,16 @@ function App() {
               <span>Sample music only. Transfers stay in this app.</span>
             </div>
           )}
-          <section className="panel" aria-labelledby="connections-title">
-            <div className="section-heading">
-              <span className="step" aria-hidden="true">01</span>
-              <div>
-                <span className="eyebrow">Set up your workspace</span>
-                <h2 id="connections-title">Connect your music</h2>
+          <div className="workspace-grid">
+            <section className="panel connections-panel" aria-labelledby="connections-title">
+              <div className="section-heading">
+                <span className="step" aria-hidden="true">1</span>
+                <div>
+                  <span className="eyebrow">Accounts</span>
+                  <h2 id="connections-title">Connect your music</h2>
+                </div>
               </div>
-            </div>
-            <div className="accounts">
+              <div className="accounts">
               {providers.map((p) => {
                 const connected = me.connected.includes(p);
                 return (
@@ -333,13 +334,13 @@ function App() {
                   </div>
                 );
               })}
-            </div>
-          </section>
-          <section className="panel" aria-labelledby="playlist-title">
+              </div>
+            </section>
+            <section className="panel route-panel" aria-labelledby="playlist-title">
             <div className="section-heading">
-              <span className="step" aria-hidden="true">02</span>
+              <span className="step" aria-hidden="true">2</span>
               <div>
-                <span className="eyebrow">Set the route</span>
+                <span className="eyebrow">New transfer</span>
                 <h2 id="playlist-title">Choose a playlist</h2>
               </div>
             </div>
@@ -452,11 +453,12 @@ function App() {
                 Connect {labels[destination]} above before analyzing this playlist.
               </p>
             )}
-          </section>
+            </section>
+          </div>
           {conversion && (
             <section className="panel transfer-panel" aria-label="Transfer details" aria-busy={active.includes(status)}>
               <div className="section-heading">
-                <span className="step" aria-hidden="true">03</span>
+                <span className="step" aria-hidden="true">3</span>
                 <div>
                   <span className="eyebrow">
                     {labels[conversion.source_provider]} →{" "}
