@@ -92,14 +92,6 @@ header {
   background: currentColor;
 }
 
-.intro {
-  display: flex;
-  gap: 1.5rem;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: clamp(2.25rem, 5vw, 4.25rem) 0 clamp(1.5rem, 3vw, 2.5rem);
-}
-
 .eyebrow {
   color: var(--secondary);
   font-size: 0.69rem;
@@ -109,31 +101,14 @@ header {
   text-transform: uppercase;
 }
 
-h1,
 h2,
 h3 {
   color: var(--text);
   letter-spacing: -0.03em;
 }
 
-h1 {
-  margin: 0;
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 700;
-  letter-spacing: -0.052em;
-  line-height: 1;
-}
-
-.intro p {
-  max-width: 390px;
-  margin: 0;
-  color: var(--secondary);
-  font-size: clamp(0.92rem, 1.4vw, 1.05rem);
-  line-height: 1.5;
-  letter-spacing: -0.012em;
-}
-
 #workspace {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
   scroll-margin-top: 5.5rem;
 }
 
@@ -218,26 +193,16 @@ h1 {
 
 .provider-logo {
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   flex: 0 0 auto;
   place-items: center;
-  border-radius: 10px;
-  background: #fff0ee;
 }
 
 .provider-logo img {
   display: block;
-  width: 19px;
-  height: 19px;
-}
-
-.apple .provider-logo {
-  background: #fff0f3;
-}
-
-.spotify .provider-logo {
-  background: #eafbea;
+  width: 26px;
+  height: 26px;
 }
 
 .connection-state {
@@ -359,14 +324,6 @@ label input {
   border: 0;
   background-color: transparent;
   font-weight: 620;
-}
-
-.route-field .provider-logo.apple {
-  background: #fff0f3;
-}
-
-.route-field .provider-logo.spotify {
-  background: #eafbea;
 }
 
 .swap-button {
@@ -776,22 +733,6 @@ progress {
   .header-meta {
     padding-inline: 0.55rem;
     font-size: 0.68rem;
-  }
-
-  .intro {
-    display: block;
-    padding: 2.5rem 0 1.5rem;
-  }
-
-  h1 {
-    font-size: clamp(2.75rem, 12vw, 3.5rem);
-    line-height: 0.98;
-  }
-
-  .intro p {
-    max-width: 32rem;
-    margin-top: 0.7rem;
-    font-size: 1rem;
   }
 
   .panel {

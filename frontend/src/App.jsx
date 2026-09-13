@@ -263,10 +263,6 @@ function App() {
           {me?.demo ? "Demo data" : "Private session"}
         </span>
       </header>
-      <section className="intro">
-        <h1>Move a playlist.</h1>
-        <p>Choose the services, review uncertain matches, then transfer.</p>
-      </section>
       {error && (
         <div className="error" role="alert">
           <span>{error}</span>
