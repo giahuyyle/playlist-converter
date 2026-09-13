@@ -1,16 +1,10 @@
-# React + Vite
+# Playlist Converter frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite. See the root README for API, worker, provider, and Docker setup.
 
-Currently, two official plugins are available:
+- `npm ci` installs dependencies.
+- `npm run dev` starts localhost:5173 and proxies `/api`, `/auth`, and `/health` to localhost:8000.
+- `npm run lint` validates React hooks and source code.
+- `npm run build` creates the production bundle.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Production Docker uses Nginx to serve the bundle and proxy API/auth/SSE through one origin. Standalone `vite preview` does not provide the production API proxy; use Docker for that setup.
