@@ -12,6 +12,7 @@ const logos = {
   spotify: "/brands/spotify.svg",
 };
 const providers = Object.keys(labels);
+const transferProviders = ["youtube", "spotify"];
 const active = ["queued", "matching", "transferring"];
 const needsDecision = ["review", "unmatched", "pending"];
 const statusLabels = {
@@ -76,7 +77,7 @@ function destinationUrl(c) {
 function App() {
   const [me, setMe] = useState(null);
   const [source, setSource] = useState("youtube");
-  const [destination, setDestination] = useState("apple");
+  const [destination, setDestination] = useState("spotify");
   const [playlists, setPlaylists] = useState([]);
   const [playlistId, setPlaylistId] = useState("");
   const [name, setName] = useState("");
@@ -289,6 +290,8 @@ function App() {
               <div className="accounts">
               {providers.map((p) => {
                 const connected = me.connected.includes(p);
+                const enabled = transferProviders.includes(p);
+                const canConnect = enabled && me.available[p];
                 return (
                   <div className={`account ${p}`} data-connected={connected} key={p}>
                     <div className="account-heading">
@@ -301,14 +304,22 @@ function App() {
                       <span aria-hidden="true" />
                       {connected
                         ? "Connected"
-                        : me.available[p]
-                          ? "Ready to connect"
-                          : "Setup required"}
+                        : !enabled
+                          ? "Unavailable"
+                          : canConnect
+                            ? "Ready to connect"
+                            : "Setup required"}
                     </p>
                     <button
                       className={connected ? "quiet" : "connect-button"}
-                      disabled={busy || !me.available[p]}
-                      aria-label={`${connected ? "Disconnect" : "Connect"} ${labels[p]}`}
+                      disabled={busy || (!connected && !canConnect)}
+                      aria-label={
+                        connected
+                          ? `Disconnect ${labels[p]}`
+                          : enabled
+                            ? `Connect ${labels[p]}`
+                            : `${labels[p]} unavailable`
+                      }
                       onClick={() =>
                         perform(async () => {
                           if (connected) {
@@ -318,7 +329,7 @@ function App() {
                         })
                       }
                     >
-                      {connected ? "Disconnect" : "Connect"}
+                      {connected ? "Disconnect" : enabled ? "Connect" : "Unavailable"}
                     </button>
                   </div>
                 );
@@ -346,11 +357,11 @@ function App() {
                     setPlaylistId("");
                     if (destination === e.target.value)
                       setDestination(
-                        providers.find((p) => p !== e.target.value),
+                        transferProviders.find((p) => p !== e.target.value),
                       );
                   }}
                 >
-                  {providers.map((p) => (
+                  {transferProviders.map((p) => (
                     <option key={p} value={p}>
                       {labels[p]}
                     </option>
@@ -377,7 +388,7 @@ function App() {
                   disabled={busy}
                   onChange={(e) => setDestination(e.target.value)}
                 >
-                  {providers
+                  {transferProviders
                     .filter((p) => p !== source)
                     .map((p) => (
                       <option key={p} value={p}>
