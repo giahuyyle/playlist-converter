@@ -188,20 +188,23 @@ h1 em {
   letter-spacing: -0.025em;
 }
 
-.provider-monogram {
+.provider-logo {
   display: grid;
   width: 32px;
   height: 32px;
   place-items: center;
   border-radius: 50%;
   background: #f4e9e4;
-  color: #91452f;
-  font-size: 9px;
-  font-weight: 800;
 }
 
-.apple .provider-monogram { background: #f6e5eb; color: #9c3c5c; }
-.spotify .provider-monogram { background: #e8f0df; color: #3f713b; }
+.provider-logo img {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.apple .provider-logo { background: #f6e5eb; }
+.spotify .provider-logo { background: #e8f0df; }
 
 .connection-state {
   display: flex;

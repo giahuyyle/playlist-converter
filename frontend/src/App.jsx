@@ -6,6 +6,11 @@ const labels = {
   apple: "Apple Music",
   spotify: "Spotify",
 };
+const logos = {
+  youtube: "/brands/youtube-music.svg",
+  apple: "/brands/apple-music.svg",
+  spotify: "/brands/spotify.svg",
+};
 const providers = Object.keys(labels);
 const active = ["queued", "matching", "transferring"];
 const needsDecision = ["review", "unmatched", "pending"];
@@ -297,8 +302,8 @@ function App() {
                 return (
                   <div className={`account ${p}`} data-connected={connected} key={p}>
                     <div className="account-heading">
-                      <span className="provider-monogram" aria-hidden="true">
-                        {p === "youtube" ? "YT" : p === "apple" ? "AM" : "SP"}
+                      <span className="provider-logo" aria-hidden="true">
+                        <img src={logos[p]} alt="" />
                       </span>
                       <h3>{labels[p]}</h3>
                     </div>
